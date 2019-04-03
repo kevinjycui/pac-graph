@@ -3,7 +3,7 @@ import random
 import pygame
 import time
 from breadth_first_search import bfs
-from random_within_facinity import rand
+from random_within_vicinity import rand
 from client import thought
 
 class Enemy(object):
