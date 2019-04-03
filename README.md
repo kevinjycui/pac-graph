@@ -1,6 +1,8 @@
 # Pac Graph
 Applying the Breadth First Search (BFS) algorithm to the classic arcade game "Pacman". Adapted for keyboard or EEG controls.
 
+![Display](diplay-img.png)
+
 ## Breadth First Search
 The Breadth First Search algorithm finds the shortest distance between any two given points on a matrix by assigning a "step" value to each traversable coordinate through a method of iteration. Each "ghost" in the game models this algorithm by applying it in a different strategy.
 * **Blinky (Red):** Blinky will find the shortest path between itself and your player using BFS, and move directly in that path. This ghost will chase you.
