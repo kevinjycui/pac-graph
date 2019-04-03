@@ -1,5 +1,5 @@
 # Pac Graph
-Applying the Breadth First Search (BFS) algorithm to the classic arcade game "Pacman". Adapted for keyboard or EEG controls.
+Applying the Breadth First Search (BFS) algorithm to the classic arcade game "Pacman" using the Pygame module. Adapted for keyboard or EEG controls.
 
 ![Display](display-img.PNG)
 
