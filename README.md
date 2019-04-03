@@ -11,4 +11,4 @@ The Breadth First Search algorithm finds the shortest distance between any two g
 * **Clyde (Orange):** In order to compare BFS to less effective algorithms in juxtaposition, Clyde follows a randomly generated path that is modified to prevent repetition. This ghost will wander about.
 
 ## EEG Implementation
-This game has been adapted for Emotiv EEG headset users. Using EEG technology, a set of commands based off of the user's neurological state can be used to navigate the player rather than using the keyboard. By making it an EEG application, users suffering from paralysis can also enjoy the game of Pacman.
+This game has been adapted for Emotiv EEG headset users. Using EEG technology, a set of commands based off of the user's neurological state can be used to navigate the player rather than using the keyboard. By making it an EEG application, users suffering from physical impairments can also enjoy the game of Pacman.
