@@ -14,7 +14,7 @@ class Enemy(object):
         if typ == 0:
             return bfs(bx, by, ex, ey, level)
         elif typ == 1:
-            return rand(bx, by, ex, ey, level)
+            return rand()
         elif typ == 2 or typ == 3:
             direct='n'
             movement=0
