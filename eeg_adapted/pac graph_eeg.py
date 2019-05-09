@@ -14,20 +14,20 @@ class Enemy(object):
         if typ == 0:
             return bfs(bx, by, ex, ey, level)
         elif typ == 1:
-            return rand(bx, by, ex, ey, level)
+            return rand()
         elif typ == 2 or typ == 3:
             direct='n'
             movement=0
-            if thought=="left":
+            if key[pygame.K_LEFT]:
                 direct = 'x'
                 movement = -1
-            if thought=="right":
+            if key[pygame.K_RIGHT]:
                 direct = 'x'
                 movement = 1
-            if thought=="lift":
+            if key[pygame.K_UP]:
                 direct = 'y'
                 movement = -1
-            if thought=="drop":
+            if key[pygame.K_DOWN]:
                 direct = 'y'
                 movement = 1
             ahead_count = 0
@@ -105,8 +105,6 @@ class Player(object):
         self.rect = pygame.Rect(16*11, 16*16, 16, 16)
 
     def move(self, dx, dy, level, prev_dx, prev_dy):
-        global move_count
-        move_count=move_count+1
         change_check = True
 
         if dx == prev_dx and dy == prev_dy:
@@ -121,7 +119,7 @@ class Player(object):
             self.move_single_axis(0, prev_dy)
             change_check = False
         
-        return (dx, dy, change_check)
+        return (dx, dy, change_check, move_count)
     
     def move_single_axis(self, dx, dy):
         
@@ -230,9 +228,9 @@ level = [
 "W      W WWWW W      W",
 "W WWWWWW      WWWWWW W",
 "W W      WXXW      W W",
-"W WWWWW WWXXWW WWWWW W",
+"W W WWW WWXXWW WWW W W",
 "X       WXXXXW       X",
-"W WWWWW WWWWWW WWWWW W",
+"W W WWW WWWWWW WWW W W",
 "W W                W W",
 "W WWWWWW   X  WWWWWW W",
 "W      W WWWW W      W",
@@ -283,11 +281,9 @@ while not exit_flag:
                 cherry_timer = 7*60
         elif cherry_timer>0 and score>=1000:
             cherry_timer-=1                    
-                
-        key = pygame.key.get_pressed()
         
-        if not key[pygame.K_LEFT] and not key[pygame.K_RIGHT] and not key[pygame.K_UP] and not key[pygame.K_DOWN] and prev_key!=[]:
-            key = prev_key
+        if thought=="neutral":
+            thought = prev_key
         if key!=prev_key:
             if player.rect.x%16<16-player.rect.x%16:
                 player.rect.x -= player.rect.x%16
@@ -297,7 +293,7 @@ while not exit_flag:
                 player.rect.y -= player.rect.y%16
             else:
                 player.rect.y += 16-player.rect.y%16
-            prev_key = key
+            prev_key = thought
             
         if thought=="left":
             if player.move(-1, 0, level, prev_dx, prev_dy)[2]:
@@ -319,6 +315,7 @@ while not exit_flag:
                 prev_dx = 0
                 prev_dy = 1
                 spr_index = 4
+        move_count+=1
 
         if path == []:
             path = enemy[0].set_path(enemy[0].rect.x//16, enemy[0].rect.y//16, player.rect.x//16, player.rect.y//16, level, 0)
@@ -398,7 +395,7 @@ while not exit_flag:
     if start_flag:
         if lives <= 0:
             game_over = title_font.render("GAME OVER", 5, WHITE)
-            text = font.render("SCORE: "+str(score+add_score), 5, WHITE)
+            text = font.render("SCORE: "+str(score+add_score+lives*1000), 5, WHITE)
             text2 = font.render("LIVES: "+str(lives), 5, WHITE)
             pygame.draw.rect(screen, BLACK, (16, 16, 16*20, 16*25))
             screen.blit(game_over, (16*4.5, 16*10))
@@ -414,12 +411,12 @@ while not exit_flag:
                         exit_flag = True
         elif score==points_total*10:
             game_over = title_font.render("YOU WIN", 5, WHITE)
-            text = font.render("SCORE: "+str(score+add_score), 5, WHITE)
-            text2 = font.render("LIVES: "+str(lives), 5, WHITE)
+            text = font.render("SCORE: "+str(score+add_score+lives*1000), 5, WHITE)
+            text2 = font.render("LIVES: "+str(lives)+" (+"+str(lives*1000)+" score)", 5, WHITE)
             pygame.draw.rect(screen, BLACK, (16, 16, 16*20, 16*25))
             screen.blit(game_over, (16*6, 16*10))
             screen.blit(text, (16*8, 16*14))
-            screen.blit(text2, (16*8.5, 16*16))
+            screen.blit(text2, (16*8, 16*16))
             pygame.display.flip()
             pygame.time.delay(4)
             while not exit_flag:
@@ -464,4 +461,3 @@ while not exit_flag:
 
 pygame.quit()
 
-           
