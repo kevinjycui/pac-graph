@@ -105,8 +105,6 @@ class Player(object):
         self.rect = pygame.Rect(16*11, 16*16, 16, 16)
 
     def move(self, dx, dy, level, prev_dx, prev_dy):
-        global move_count
-        move_count=move_count+1
         change_check = True
 
         if dx == prev_dx and dy == prev_dy:
@@ -121,7 +119,7 @@ class Player(object):
             self.move_single_axis(0, prev_dy)
             change_check = False
         
-        return (dx, dy, change_check)
+        return (dx, dy, change_check, move_count)
     
     def move_single_axis(self, dx, dy):
         
@@ -230,9 +228,9 @@ level = [
 "W      W WWWW W      W",
 "W WWWWWW      WWWWWW W",
 "W W      WXXW      W W",
-"W WWWWW WWXXWW WWWWW W",
+"W W WWW WWXXWW WWW W W",
 "X       WXXXXW       X",
-"W WWWWW WWWWWW WWWWW W",
+"W W WWW WWWWWW WWW W W",
 "W W                W W",
 "W WWWWWW   X  WWWWWW W",
 "W      W WWWW W      W",
@@ -299,26 +297,23 @@ while not exit_flag:
                 player.rect.y += 16-player.rect.y%16
             prev_key = key
             
-        if key[pygame.K_LEFT]:
-            if player.move(-1, 0, level, prev_dx, prev_dy)[2]:
-                prev_dx = -1
-                prev_dy = 0
-                spr_index = 1
-        elif key[pygame.K_RIGHT]:
-            if player.move(1, 0, level, prev_dx, prev_dy)[2]:
-                prev_dx = 1
-                prev_dy = 0
-                spr_index = 2
-        elif key[pygame.K_UP]:
-            if player.move(0, -1, level, prev_dx, prev_dy)[2]:
-                prev_dx = 0
-                prev_dy = -1
-                spr_index = 3
-        elif key[pygame.K_DOWN]:
-            if player.move(0, 1, level, prev_dx, prev_dy)[2]:
-                prev_dx = 0
-                prev_dy = 1
-                spr_index = 4
+        if key[pygame.K_LEFT] and player.move(-1, 0, level, prev_dx, prev_dy)[2]:
+            prev_dx = -1
+            prev_dy = 0
+            spr_index = 1
+        elif key[pygame.K_RIGHT] and player.move(1, 0, level, prev_dx, prev_dy)[2]:
+            prev_dx = 1
+            prev_dy = 0
+            spr_index = 2
+        elif key[pygame.K_UP] and player.move(0, -1, level, prev_dx, prev_dy)[2]:
+            prev_dx = 0
+            prev_dy = -1
+            spr_index = 3
+        elif key[pygame.K_DOWN] and player.move(0, 1, level, prev_dx, prev_dy)[2]:
+            prev_dx = 0
+            prev_dy = 1
+            spr_index = 4
+        move_count+=1
 
         if path == []:
             path = enemy[0].set_path(enemy[0].rect.x//16, enemy[0].rect.y//16, player.rect.x//16, player.rect.y//16, level, 0)
@@ -398,7 +393,7 @@ while not exit_flag:
     if start_flag:
         if lives <= 0:
             game_over = title_font.render("GAME OVER", 5, WHITE)
-            text = font.render("SCORE: "+str(score+add_score), 5, WHITE)
+            text = font.render("SCORE: "+str(score+add_score+lives*1000), 5, WHITE)
             text2 = font.render("LIVES: "+str(lives), 5, WHITE)
             pygame.draw.rect(screen, BLACK, (16, 16, 16*20, 16*25))
             screen.blit(game_over, (16*4.5, 16*10))
@@ -414,12 +409,12 @@ while not exit_flag:
                         exit_flag = True
         elif score==points_total*10:
             game_over = title_font.render("YOU WIN", 5, WHITE)
-            text = font.render("SCORE: "+str(score+add_score), 5, WHITE)
-            text2 = font.render("LIVES: "+str(lives), 5, WHITE)
+            text = font.render("SCORE: "+str(score+add_score+lives*1000), 5, WHITE)
+            text2 = font.render("LIVES: "+str(lives)+" (+"+str(lives*1000)+" score)", 5, WHITE)
             pygame.draw.rect(screen, BLACK, (16, 16, 16*20, 16*25))
             screen.blit(game_over, (16*6, 16*10))
             screen.blit(text, (16*8, 16*14))
-            screen.blit(text2, (16*8.5, 16*16))
+            screen.blit(text2, (16*8, 16*16))
             pygame.display.flip()
             pygame.time.delay(4)
             while not exit_flag:
